@@ -17,29 +17,18 @@ var addOneRow = function(root, val, depth) {
     const node = new TreeNode(val, root)
     return node
   }
-  let curDepth = 0
-  const stack = [[root]]
-  while (stack.length > 0) {
-    const curNodeArr = stack.pop()
-    curDepth++
-    if (curDepth + 1 === depth) {
-      console.log(curNodeArr)
-      curNodeArr.forEach(node => {
-        const tempLeft = node.left
-        const leftNode = new TreeNode(val, tempLeft)
-        node.left = leftNode
-        const tempRight = node.right
-        const rightNode = new TreeNode(val, null, tempRight)
-        node.right = rightNode
-      })
-      break
-    }
-    const nodeArr = []
-    curNodeArr.forEach(node => {
-      if (node.left) nodeArr.push(node.left)
-      if (node.right) nodeArr.push(node.right)
-    })
-    nodeArr.length && stack.push(nodeArr)
-  }
+  dfs(root, 1)
   return root
+  function dfs(root, cur) {
+    if (root == null) return
+    if (cur === depth - 1) {
+      const left = new TreeNode(val, root.left)
+      const right = new TreeNode(val, null, root.right)
+      root.left = left
+      root.right = right
+    } else {
+      dfs(root.left, cur + 1)
+      dfs(root.right, cur + 1)
+    }
+  }
 };
