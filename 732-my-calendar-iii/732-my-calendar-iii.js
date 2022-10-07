@@ -1,6 +1,7 @@
 
 var MyCalendarThree = function() {
-  this.planTimes = {}
+  this.tree = new Map()
+  this.lazy = new Map()
 };
 
 /** 
@@ -9,15 +10,21 @@ var MyCalendarThree = function() {
  * @return {number}
  */
 MyCalendarThree.prototype.book = function(start, end) {
-  this.planTimes[start] = (this.planTimes[start] || 0) + 1
-  this.planTimes[end] = (this.planTimes[end] || 0) - 1
-  let [cur, res] = [0, 0]
-  Object.values(this.planTimes).forEach(val => {
-    cur += val
-    res = Math.max(res, cur)
-  })
-  return res
+  this.update(start, end - 1, 0, 1000000000, 1)
+  return this.tree.get(1) || 0
 };
+MyCalendarThree.prototype.update = function(start, end, l, r, idx) {
+  if (start > r || end < l) return
+  if (start <= l && end >= r) {
+    this.tree.set(idx, (this.tree.get(idx) || 0) + 1)
+    this.lazy.set(idx, (this.lazy.get(idx) || 0) + 1)
+  } else {
+    const mid = l + ((r - l) / 2 >> 0)
+    this.update(start, end, l, mid, 2 * idx)
+    this.update(start, end, mid + 1, r, 2 * idx + 1)
+    this.tree.set(idx, (this.lazy.get(idx) || 0) +  Math.max(this.tree.get(2 * idx) || 0, this.tree.get(2 * idx + 1) || 0))
+  }
+}
 
 /** 
  * Your MyCalendarThree object will be instantiated and called as such:
