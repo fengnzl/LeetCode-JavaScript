@@ -2,7 +2,7 @@
  * @param {number[]} nums
  * @return {number}
  */
-var getMaxLen = function(nums) {
+var getMaxLen2 = function(nums) {
   // 创建两个 dp 数组 分别记录 i 位置 连续乘积为负数和正数的值，同时更新最大连续正数值
   const n = nums.length
   const positive = Array(n).fill(0)
@@ -32,3 +32,30 @@ var getMaxLen = function(nums) {
   }
   return result
 };
+// 使用滚动数组的思想
+var getMaxLen = function(nums) {
+  const n = nums.length
+  let positive = 0
+  let negative = 0
+  if (nums[0] > 0) {
+    positive++ 
+  } else if (nums[0] < 0) {
+    negative++
+  }
+  let result = positive
+  for (let i = 1;i< n;i++) {
+    if (nums[i] > 0) {
+      positive++
+      negative = negative > 0 ? negative + 1 : 0
+    } else if (nums[i] < 0) {
+      let newPositive = negative > 0 ? negative + 1 : 0
+      negative = positive + 1
+      positive = newPositive
+    } else {
+      negative = 0
+      positive = 0
+    }
+    if (positive > result) result = positive
+  }
+  return result
+}
