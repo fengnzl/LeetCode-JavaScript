@@ -7,23 +7,23 @@ var generateMatrix = function(n) {
   let [left, right, top, bottom] = [0, n - 1, 0, n - 1]
   let num = 1
   while (left <= right && top <= bottom) {
-    // 从左到右
-    for (let column = left;column <= right;column++) {
+    // 从左往右
+    for(let column = left;column <= right;column++) {
       matrix[top][column] = num
       num++
     }
-    // 从上到下
+    // 从上往下
     for (let row = top + 1;row <= bottom;row++) {
       matrix[row][right] = num
       num++
     }
     if (left < right && top < bottom) {
-      // 从右到左
-      for (let column = right - 1;column >= left;column--) {
+      // 从右往左
+      for(let column = right - 1;column >= left;column--) {
         matrix[bottom][column] = num
         num++
       }
-      // 从下到上
+      // 从下往上
       for (let row = bottom - 1;row > top;row--) {
         matrix[row][left] = num
         num++
