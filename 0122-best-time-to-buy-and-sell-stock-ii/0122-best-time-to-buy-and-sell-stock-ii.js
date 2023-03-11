@@ -2,30 +2,15 @@
  * @param {number[]} prices
  * @return {number}
  */
-// var maxProfit = function(prices) {
-//   const n = prices.length
-//   const dp = Array.from({ length: n }, () => Array(2).fill(0))
-//   // dp[i][0] 代表当天不持有股票的最大值
-//   // dp[i][1] 代表当天持有股票的最大值
-//   dp[0][0] = 0
-//   dp[0][1] = -prices[0]
-//   for (let i = 1;i < n;i++) {
-//     dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i])
-//     dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i])
-//   }
-//   // 最后一天不持有股票的利润最大
-//   return dp[n - 1][0]
-// };
-
-// 通过 dp 优化
 var maxProfit = function(prices) {
-  const n = prices.length
-  let notHold = 0
-  let hold = -prices[0]
-  for (let i = 1;i < n;i++) {
-    if (hold + prices[i] > notHold) notHold = hold + prices[i]
-    if (notHold - prices[i] > hold) hold = notHold - prices[i]
+  // 加入第一天购买 第三天卖可以获取最大利润
+  // prices[2] - prices[0] = (prices[2] - prices[1]) + (prices[1] - prices[0])
+  // 相当于获取每天减去前一天的值总和
+  // [7,1,5,10,3,6,4] 对应相邻两天的差值 [-6, 4, 5, -7, 3, -2] 这时我们对正值进行总和计算可以的得到 12 与 第二天买第四天卖随后，第五天买第六天卖获取的最大总利润相同
+  //  因此我们只需要对相邻差值为正的计算总和即可
+  let max = 0
+  for (let i = 1;i < prices.length;i++) {
+    max += Math.max(prices[i] - prices[i - 1], 0)
   }
-  // 最后一天不持有股票的利润最大
-  return notHold
-}
+  return max
+};
