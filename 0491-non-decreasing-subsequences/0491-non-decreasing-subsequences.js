@@ -4,28 +4,32 @@
  */
 var findSubsequences = function(nums) {
   const ans = []
-  const set = new Set()
-  backtrack(nums, 0, [])
+  const ansSet = new Set()
+  backTrack(0, nums, [])
   return ans
-  function backtrack(nums, stage, path) {
+  function backTrack(stage, nums, path) {
+    // 如果已经遍历完
     if (stage === nums.length) {
-      if (path.length >= 2) {
-        const pathStr = path.join()
-        if (!set.has(pathStr)) {
-          set.add(pathStr)
-          ans.push([...path])
-        }
+      // 如果存在两个元素及以上且之前没有添加 则添加到数组
+      const pathStr = path.join()
+      if (path.length >= 2 && !ansSet.has(pathStr)) {
+        ansSet.add(pathStr)
+        ans.push([...path])
       }
       return
     }
-    // not choose
-    backtrack(nums, stage + 1, path)
-    
-    // choose
-    if (path.length === 0 || nums[stage] >= path[path.length - 1]) {
-      path.push(nums[stage])
-      backtrack(nums, stage + 1, path)
-      path.pop()
+    // 不选择
+    backTrack(stage + 1, nums, path)
+
+    // 选择下一个数据
+    for (let i = stage;i < nums.length;i++) {
+      if (!path.length || nums[i] >= path[path.length - 1]) {
+        // 做选择
+        path.push(nums[i])
+        backTrack(i + 1, nums, path)
+        // 撤销选择
+        path.pop()
+      }
     }
   }
 };
