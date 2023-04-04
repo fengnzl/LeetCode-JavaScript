@@ -30,7 +30,7 @@ var addTwoNumbers = function(l1, l2) {
     }
     p.next = new ListNode(sum % 10)
     p = p.next
-    next = Math.floor(sum / 10)
+    next = sum / 10 | 0
   }
   if (next > 0) {
     p.next = new ListNode(next)
