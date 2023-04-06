@@ -21,6 +21,7 @@ var longestPalindrome = function(s) {
   for (let len = 2;len <= n;len++) {
     for (let i = 0;i < n;i++) {
       const j = len + i - 1
+      if (j >= n) break
       if (s[i] !== s[j]) {
         dp[i][j] = false
       } else {
