@@ -3,18 +3,26 @@
  * @return {string}
  */
 var reverseWords = function(s) {
-  return s.split(' ').reduce((prev, cur) => {
-    prev += ` ${reverse(cur)}`
-    return prev
-  }, '').slice(1)
-  function reverse(s) {
-    s = s.split('')
-    let [i, j] = [0, s.length - 1]
-    while (i < j) {
-      [s[i], s[j]] = [s[j], s[i]]
-      i++
-      j--
+  const n = s.length
+  if (n === 1) return s
+  let i = 0
+  let ans = ''
+  while (i < n) {
+    let j = i
+    while (s[j] !== ' ' && j < n) {
+      j++
     }
-    return s.join('')
+    ans += reverse(s, i, j - 1) + ' '
+    i = j + 1
+  }
+  return ans.slice(0, -1)
+
+  function reverse(s, start, end) {
+    let ans = ''
+    while (end >= start) {
+      ans += s[end]
+      end--
+    }
+    return ans
   }
 };
