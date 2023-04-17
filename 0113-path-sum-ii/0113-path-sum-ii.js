@@ -12,20 +12,22 @@
  * @return {number[][]}
  */
 var pathSum = function(root, targetSum) {
-  if (root == null) return []
+  if (root == null)return []
   const ans = []
-  const path = []
-  dfs(root, path)
+  dfs(root, [], 0, targetSum)
   return ans
-  function dfs(root, path, sum = 0) {
+  function dfs(root, path, pathSum, targetSum) {
     path.push(root.val)
-    if (root.left == null && root.right == null && sum + root.val === targetSum) {
+    // 叶子结点判断
+    if (root.left === null && root.right === null && pathSum + root.val === targetSum) {
       ans.push([...path])
       path.pop()
       return
     }
-    if (root.left) dfs(root.left, path, sum + root.val)
-    if (root.right) dfs(root.right, path, sum + root.val)
+    // 递归遍历左右子节点
+    root.left && dfs(root.left, path, pathSum + root.val, targetSum)
+    root.right && dfs(root.right, path, pathSum + root.val, targetSum)
+    // 取消当前选择
     path.pop()
   }
 };
