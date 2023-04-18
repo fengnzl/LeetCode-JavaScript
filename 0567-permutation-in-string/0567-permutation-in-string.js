@@ -5,30 +5,24 @@
  */
 var checkInclusion = function(s1, s2) {
   const [n, m] = [s1.length, s2.length]
-  const charMap = new Map()
+  if(n > m) return false
+  // 滑动窗口
+  const count1 = Array(26).fill(0)
+  const count2 = Array(26).fill(0)
+  const aCharCode = 'a'.charCodeAt()
   for (let i = 0;i < n;i++) {
-    charMap.set(s1[i], (charMap.get(s1[i]) || 0) + 1)
+    count1[s1[i].charCodeAt() - aCharCode]++
+    count2[s2[i].charCodeAt() - aCharCode]++
   }
-  let j = 0
-  while (j < m) {
-    if (charMap.has(s2[j])) {
-      let q = j
-      const charMapCopy = new Map(charMap)
-      // 当前 s2 的字符不在 s1 里面
-      while (charMapCopy.has(s2[q])) {
-        const val = charMapCopy.get(s2[q])
-        if (val === 1) {
-          charMapCopy.delete(s2[q])
-        } else {
-          charMapCopy.set(s2[q], val - 1)
-        }
-        q++
-      }
-      if (charMapCopy.size === 0 && q - j === n) {
-        return true
-      }
+  if (count2.join() === count1.join()) {
+    return true
+  }
+  for (let i = n;i < m;i++) {
+    count2[s2[i].charCodeAt() - aCharCode]++
+    count2[s2[i - n].charCodeAt() - aCharCode]--
+    if (count1.join() === count2.join()) {
+      return true
     }
-    j++
   }
   return false
 };
