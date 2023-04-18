@@ -12,21 +12,27 @@
  * @return {number}
  */
 var pathSum = function(root, targetSum) {
-  if (root == null) return 0
-  let count = 0
-  dfs(root)
-  return count
-  // 双重 dfs 时间复杂度 O(n^2)
-  // 先 dfs 遍历每个节点，然后dfs 遍历以该节点为开始的路径和
-  function dfs(root) {
-    if (root == null) return
-    dfs2(root, root.val)
-    dfs(root.left)
-    dfs(root.right)
-  }
-  function dfs2(root, val) {
-    if (val === targetSum) count++
-    root.left && dfs2(root.left, val + root.left.val)
-    root.right && dfs2(root.right, val + root.right.val)
+  // 使用前缀和 当前节点反推根节点
+  // 当前路径和 curSum
+  // curSum += root.val
+  // curSum - target 找到当前路径和起点，起点的 sum + target = curSum, 因此两点位置路径和为 target
+  // res += map.get(curSum - target) || 0
+  // 更新当前节点前缀和的个数
+  // map.set(curSum, (map.get(curSum) || 0) + 1)
+  const map = new Map()
+  // 针对空二叉树 其前缀和为 0
+  map.set(0, 1)
+  return dfs(root, map, targetSum, 0)
+  function dfs(root, map, targetSum, curSum) {
+    if (root == null) return 0
+    let res = 0
+    curSum += root.val
+    res += map.get(curSum - targetSum) || 0
+    map.set(curSum, (map.get(curSum) || 0) + 1)
+    res += dfs(root.left, map, targetSum, curSum)
+    res += dfs(root.right, map, targetSum, curSum)
+    // 保证单向
+    map.set(curSum, map.get(curSum) - 1)
+    return res
   }
 };
