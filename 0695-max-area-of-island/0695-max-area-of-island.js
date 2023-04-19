@@ -5,24 +5,12 @@
 var maxAreaOfIsland = function(grid) {
   const h = grid.length
   const w = grid[0].length
-  // 记录 grid 中岛上值为 1 的单元格索引值
-  const areaIsland = []
+  let max = 0
   for(let i = 0;i < h;i++) {
     for (let j = 0;j < w;j++) {
-      if (grid[i][j] === 1) {
-        areaIsland.push([i, j])
-      }
+      max = Math.max(max, dfs(grid, i, j))
     }
   }
-  // 没有为1、只有一个为1的以及全部为1的
-  if (areaIsland.length <= 1 || areaIsland.length === h * w)
-    return areaIsland.length
-  // 最大岛屿面积
-  let max = 0
-  areaIsland.forEach(([i, j]) => {
-    const val = dfs(grid, i, j)
-    if (max < val) max = val
-  })
   return max
   function dfs(grid, i, j) {
     if (
