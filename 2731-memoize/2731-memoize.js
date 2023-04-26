@@ -5,12 +5,10 @@ function memoize(fn) {
     const map = new Map()
     return function(...args) {
       const key = args.join('_')
-      if (map.has(key)) {
-        return map.get(key)
+      if (!map.has(key)) {
+        map.set(key, fn(...args))
       }
-      const val = fn(...args)
-      map.set(key, val)
-      return val
+      return map.get(key)
     }
 }
 
