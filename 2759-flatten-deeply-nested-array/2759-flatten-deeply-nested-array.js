@@ -9,15 +9,10 @@ var flat = function (arr, n) {
   let hasNested = false
   while (n > 0) {
     hasNested = false
-    ans = ans.reduce((prev, cur) =>  {
-      if (Array.isArray(cur)) {
-        hasNested = true
-        prev.push(...cur)
-      } else {
-        prev.push(cur)
-      }
-      return prev
-    }, []) 
+    if (ans.some(item => Array.isArray(item))) {
+      hasNested = true
+      ans = [].concat(...ans)
+    }
     if (!hasNested) return ans
     n--
   }
