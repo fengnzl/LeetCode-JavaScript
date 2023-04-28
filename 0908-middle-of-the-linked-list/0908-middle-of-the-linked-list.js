@@ -11,9 +11,9 @@
  */
 var middleNode = function(head) {
   let [low, fast] = [head, head]
-  while (fast != null && fast.next !== null) {
+  while (fast !== null && fast.next !== null) {
     low = low.next
-    fast = fast.next.next
+    fast =fast.next.next
   }
   return low
 };
